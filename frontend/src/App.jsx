@@ -12,6 +12,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import VerifyEmail from './pages/VerifyEmail'
 import Saved from './pages/Saved'
 import MyEnquiries from './pages/MyEnquiries'
 import ProviderDashboard from './pages/ProviderDashboard'
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="/agent-login" element={<Login role="agent" />} />
           <Route path="/admin-login" element={<Login role="admin" />} />
           <Route path="/register" element={<Register />} />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
           <Route
             path="/saved"
             element={<ProtectedRoute roles={['student']}><Saved /></ProtectedRoute>}

@@ -1,30 +1,57 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { MailCheck } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Field from '../components/Field'
-import { useAuth } from '../context/AuthContext'
-import { errMsg } from '../api'
+import ResendVerification from '../components/ResendVerification'
+import api, { errMsg } from '../api'
 
 export default function Register() {
-  const { register: signUp } = useAuth()
-  const navigate = useNavigate()
+  const [sent, setSent] = useState(null) // { email, status } once the account exists
   const { register, handleSubmit, getValues, formState: { errors, isSubmitting } } = useForm({
     defaultValues: { role: 'student' },
   })
 
   const onSubmit = async (values) => {
     try {
-      const user = await signUp({
+      const { data } = await api.post('/auth/register', {
         fullName: values.fullName,
         email: values.email,
         password: values.password,
         role: values.role,
       })
-      toast.success('Account created. Welcome to ResHub!')
-      navigate(user.role === 'provider' ? '/provider' : '/', { replace: true })
+      setSent({ email: data.email, status: data.emailStatus })
     } catch (err) {
       toast.error(errMsg(err))
     }
+  }
+
+  if (sent) {
+    return (
+      <div className="auth">
+        <div className="auth-card verify-card">
+          <MailCheck size={44} strokeWidth={1.6} />
+          <h1>Check your email</h1>
+          {sent.status === 'failed' ? (
+            <p>
+              Your account was created, but we could not send the verification email just now.
+              Tap the button below to try again.
+            </p>
+          ) : (
+            <p>
+              We have sent a verification link to <strong>{sent.email}</strong>. Open it to
+              activate your account. The link works for 24 hours.
+            </p>
+          )}
+          <p className="hint">Cannot see it? Check your spam folder.</p>
+          <ResendVerification email={sent.email} startCooldown={sent.status !== 'failed'} />
+          <p className="alt-text">
+            Already verified? <Link to="/login">Sign in</Link>
+          </p>
+        </div>
+      </div>
+    )
   }
 
   return (

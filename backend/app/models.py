@@ -16,6 +16,11 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(20), nullable=False, default="student")  # student | provider | admin
     is_active = db.Column(db.Boolean, nullable=False, default=True, server_default=db.text("true"))
+        # Email verification. server_default=true means accounts that already existed when this
+    # was added count as verified; the register route creates new sign-ups as unverified.
+    email_verified = db.Column(db.Boolean, nullable=False, default=False, server_default=db.text("true"))
+    verification_version = db.Column(db.Integer, nullable=False, default=0, server_default="0")
+    verification_sent_at = db.Column(db.DateTime, nullable=True)
     is_verified = db.Column(db.Boolean, nullable=False, default=False, server_default=db.text("false"))
     created_at = db.Column(db.DateTime, default=utcnow)
 

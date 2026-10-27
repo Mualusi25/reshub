@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import Field from '../components/Field'
+import ResendVerification from '../components/ResendVerification'
 import { useAuth } from '../context/AuthContext'
 import { errMsg } from '../api'
 
@@ -18,15 +20,19 @@ export default function Login({ role = 'student' }) {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [unverified, setUnverified] = useState('') // email waiting to be verified
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm()
 
   const onSubmit = async (values) => {
+    setUnverified('')
     try {
       const user = await login({ ...values, role })
       toast.success(`Welcome back, ${user.fullName.split(' ')[0]}!`)
       navigate(location.state?.from || HOME[user.role] || '/', { replace: true })
     } catch (err) {
-      toast.error(errMsg(err))
+      const data = err.response?.data
+      if (data?.code === 'email_not_verified') setUnverified(data.email || values.email)
+      else toast.error(errMsg(err))
     }
   }
 
@@ -34,6 +40,16 @@ export default function Login({ role = 'student' }) {
     <div className="auth">
       <form className="auth-card" onSubmit={handleSubmit(onSubmit)} noValidate>
         <h1>{TITLES[role]}</h1>
+
+        {unverified && (
+          <div className="verify-notice" role="alert">
+            <p>
+              Please verify your email address before signing in. We sent a link to{' '}
+              <strong>{unverified}</strong>.
+            </p>
+            <ResendVerification email={unverified} />
+          </div>
+        )}
 
         <Field label="Email" id="email" error={errors.email}>
           <input
