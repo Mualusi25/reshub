@@ -573,3 +573,48 @@ a.card-img { text-decoration: none; }
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+/* ===== About: team ===== */
+.team-figure { margin: 0 auto 24px; max-width: 960px; text-align: center; }
+.team-figure img {
+  display: block; max-width: 100%; max-height: 620px; width: auto; height: auto; margin: 0 auto;
+  border-radius: 14px; box-shadow: var(--shadow); border: 1px solid var(--border);
+}
+.team-figure figcaption { margin-top: 12px; color: var(--grey); font-size: 14px; font-weight: 500; }
+.team-placeholder {
+  height: 320px; border-radius: 14px; color: var(--purple); border: 1px dashed #cfd4dc;
+  background: linear-gradient(135deg, var(--purple-light), #e1f5f4);
+  display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center;
+}
+.team-text { max-width: 760px; margin: 0 auto 28px; text-align: center; }
+.team-text p { color: #3c374c; line-height: 1.8; margin-bottom: 12px; }
+.team-groups { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.team-group { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.team-group h3 { color: var(--purple); font-size: 16px; margin-bottom: 10px; }
+.team-group ul { display: flex; flex-wrap: wrap; gap: 6px; }
+.team-group li {
+  background: var(--purple-light); color: var(--purple); border-radius: 20px;
+  padding: 3px 12px; font-size: 13px; font-weight: 500;
+}
+@media (max-width: 800px) { .team-groups { grid-template-columns: 1fr; } }
+
+/* ===== Home: cover image ===== */
+.hero-cover {
+  background-color: var(--purple-dark);
+  background-image:
+    linear-gradient(90deg, rgba(69, 35, 111, 0.93) 0%, rgba(69, 35, 111, 0.78) 45%, rgba(69, 35, 111, 0.3) 100%),
+    url('/cover.jpeg');
+  background-size: cover;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
+.hero-cover h1 { color: #fff; }
+.hero-cover h1 span { color: #7fe3e0; }
+.hero-cover .lead { color: #e8e2f2; }
+.hero-cover .hero-art { display: none; }
+
+/* On tablets and phones the text is centred, so tint the whole image evenly */
+@media (max-width: 1100px) {
+  .hero-cover {
+    background-image: linear-gradient(rgba(69, 35, 111, 0.82), rgba(69, 35, 111, 0.82)), url('/cover.jpeg');
+  }
+}

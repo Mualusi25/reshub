@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="hero">
+      <section className="hero hero-cover">
         <div className="hero-grid">
           <div>
             <h1>
